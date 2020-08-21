@@ -39,14 +39,14 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Book.objects.all()  # return Book.objects.filter(title__icontains='python')[:5]  # Получение 5 книг, содержащих слово "python" в
-        # заголовке
+        return Book.objects.all()  # Получение списка всех книг
+        
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(
-            **kwargs)  # В первую очередь получаем базовую реализацию контекста
+            **kwargs)  
         context[
-            'some_data'] = 'This is just some data'  # Добавляем новую переменную к контексту и инициализаруем ее некоторым значением
+            'some_data'] = 'This is just some data'  
         return context
 
 
@@ -60,13 +60,13 @@ class AuthorListView(generic.ListView):
 
     def get_queryset(self):
         return Author.objects.all()  # Получения списка всех авторов
-        # заголовке
+        
 
     def get_context_data(self, **kwargs):
         context = super(AuthorListView, self).get_context_data(
-            **kwargs)  # В первую очередь получаем базовую реализацию контекста
+            **kwargs)  
         context[
-            'some_data'] = 'This is just some data'  # Добавляем новую переменную к контексту и инициализаруем ее некоторым значением
+            'some_data'] = 'This is just some data'  
         return context
 
 
@@ -110,7 +110,7 @@ def renew_book_librarian(request, pk):
     # Если данный запрос типа POST, тогда
     if request.method == 'POST':
         form = RenewBookForm(
-            request.POST)  # Создаем экземпляр формы и заполняем данными из запроса (связывание, binding)
+            request.POST)  # Создаем экземпляр формы и заполняем данными из запроса
         if form.is_valid():  # Проверка валидности данных формы
             book_inst.due_back = form.cleaned_data[
                 'renewal_date']  # Обработка данных из form.cleaned_data, здесь мы просто присваиваем их поля due_back
