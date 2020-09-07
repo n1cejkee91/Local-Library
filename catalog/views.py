@@ -39,14 +39,14 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Book.objects.all()  # Получение списка всех книг
-        
+        return Book.objects.all()  # return Book.objects.filter(title__icontains='python')[:5]  # Получение 5 книг, содержащих слово "python" в
+        # заголовке
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(
-            **kwargs)  
+            **kwargs)  # В первую очередь получаем базовую реализацию контекста
         context[
-            'some_data'] = 'This is just some data'  
+            'some_data'] = 'This is just some data'  # Добавляем новую переменную к контексту и инициализаруем ее некоторым значением
         return context
 
 
@@ -60,13 +60,13 @@ class AuthorListView(generic.ListView):
 
     def get_queryset(self):
         return Author.objects.all()  # Получения списка всех авторов
-        
+        # заголовке
 
     def get_context_data(self, **kwargs):
         context = super(AuthorListView, self).get_context_data(
-            **kwargs)  
+            **kwargs)  # В первую очередь получаем базовую реализацию контекста
         context[
-            'some_data'] = 'This is just some data'  
+            'some_data'] = 'This is just some data'  # Добавляем новую переменную к контексту и инициализаруем ее некоторым значением
         return context
 
 
@@ -110,7 +110,7 @@ def renew_book_librarian(request, pk):
     # Если данный запрос типа POST, тогда
     if request.method == 'POST':
         form = RenewBookForm(
-            request.POST)  # Создаем экземпляр формы и заполняем данными из запроса
+            request.POST)  # Создаем экземпляр формы и заполняем данными из запроса (связывание, binding)
         if form.is_valid():  # Проверка валидности данных формы
             book_inst.due_back = form.cleaned_data[
                 'renewal_date']  # Обработка данных из form.cleaned_data, здесь мы просто присваиваем их поля due_back
@@ -165,3 +165,20 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
     permission_required = 'catalog.can_set_book'
     success_url = reverse_lazy('books')
+
+
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import UserCreationForm
+
+
+class RegisterFormView(FormView):
+    form_class = UserCreationForm
+
+    success_url = "/"
+
+    template_name = "registration_user.html"
+
+    def form_valid(self, form):
+        form.save()
+
+        return super(RegisterFormView, self).form_valid(form)
